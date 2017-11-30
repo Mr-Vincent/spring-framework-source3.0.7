@@ -39,7 +39,7 @@ atlassian-ide-plugin.xml
 out
 
 # java
-/target/
+target
 *.class
 *.jar
 
