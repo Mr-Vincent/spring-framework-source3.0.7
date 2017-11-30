@@ -38,6 +38,11 @@ atlassian-ide-plugin.xml
 *.iws
 out
 
+# java
+/target/
+*.class
+*.jar
+
 # Gradle
 .gradle
 build
