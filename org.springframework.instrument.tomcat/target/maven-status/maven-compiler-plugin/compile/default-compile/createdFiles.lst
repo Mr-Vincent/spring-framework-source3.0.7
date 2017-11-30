@@ -1,0 +1,2 @@
+org\springframework\instrument\classloading\tomcat\TomcatInstrumentableClassLoader.class
+org\springframework\instrument\classloading\WeavingTransformer.class
