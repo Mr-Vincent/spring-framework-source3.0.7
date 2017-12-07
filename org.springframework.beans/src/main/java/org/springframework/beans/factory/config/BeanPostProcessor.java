@@ -31,7 +31,11 @@ import org.springframework.beans.BeansException;
  * or the like will implement {@link #postProcessBeforeInitialization},
  * while post-processors that wrap beans with proxies will normally
  * implement {@link #postProcessAfterInitialization}.
- *
+ * 如果这个接口的某个实现类被注册到某个容器，
+ * 那么该容器的每个受管Bean在调用初始化方法之前，
+ * 都会获得该接口实现类的一个回调。容器调用接口定义的方法时会将该受管Bean的实例和名字通过参数传入方法，
+ * 进过处理后通过方法的返回值返回给容器。
+ * 在3.x版本中无法体现 新的版本中能够看出效果
  * @author Juergen Hoeller
  * @since 10.10.2003
  * @see InstantiationAwareBeanPostProcessor

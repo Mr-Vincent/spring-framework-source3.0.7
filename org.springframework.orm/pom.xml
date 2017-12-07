@@ -11,19 +11,62 @@
 		<artifactId>spring-parent</artifactId>
 		<version>3.0.7.RELEASE.dw</version>
 	</parent>
+
+    <repositories>
+        <repository>
+            <id>Central Repository</id>
+            <name>Central</name>
+            <url>http://central.maven.org/maven2/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>Sonatype Releases Repository</id>
+            <name>Sonatype</name>
+            <url>https://oss.sonatype.org/content/repositories/releases/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>Spring Plugins Repository</id>
+            <name>Spring</name>
+            <url>http://repo.spring.io/plugins-release/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>toplink.essentials</groupId>
 			<artifactId>toplink-essentials</artifactId>
 			<version>2.0-41</version>
 			<optional>true</optional>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.persistence</groupId>
+					<artifactId>persistence-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>aopalliance</groupId>
 			<artifactId>aopalliance</artifactId>
 			<version>1.0</version>
 			<optional>true</optional>
-		</dependency>
+		</dependency>-->
 		<!-- common logging dependency is in spring-core -->
 		<dependency>
 			<groupId>org.apache.ibatis</groupId>
@@ -31,34 +74,44 @@
 			<version>2.3.4.726</version>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.openjpa</groupId>
-			<artifactId>openjpa</artifactId>
-			<version>1.1.0</version>
-			<optional>true</optional>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.openjpa</groupId>
+            <artifactId>openjpa</artifactId>
+            <version>1.1.0</version>
+            <optional>true</optional>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-pool</groupId>
+                    <artifactId>commons-pool</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-jta_1.1_spec</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>org.eclipse.persistence.core</artifactId>
-			<version>1.0.1</version>
+			<version>2.7.0</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>org.eclipse.persistence.jpa</artifactId>
-			<version>1.0.1</version>
+			<version>2.7.0</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>org.eclipse.persistence.asm</artifactId>
-			<version>1.0.1</version>
+			<version>2.7.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>org.eclipse.persistence.antlr</artifactId>
-			<version>1.0.1</version>
+			<version>2.7.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -96,12 +149,56 @@
 			<artifactId>hibernate-annotations</artifactId>
 			<version>3.4.0.GA</version>
 			<optional>true</optional>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>dom4j</groupId>
+                    <artifactId>dom4j</artifactId>
+                </exclusion>
+            </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>3.4.0.GA</version>
 			<optional>true</optional>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>ejb3-persistence</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate-commons-annotations</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate-annotations</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>dom4j</groupId>
+                    <artifactId>dom4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.transaction</groupId>
+                    <artifactId>jta</artifactId>
+                </exclusion>
+            </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>javax.jdo</groupId>
@@ -127,30 +224,30 @@
 			<version>1.1</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
 			<version>${project.version}</version>
 			<optional>true</optional>
-		</dependency>
-		<dependency>
+		</dependency>-->
+		<!--<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
-		</dependency>
-		<dependency>
+		</dependency>-->
+		<!--<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>${project.version}</version>
 			<optional>true</optional>
-		</dependency>
-		<dependency>
+		</dependency>-->
+		<!--<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>

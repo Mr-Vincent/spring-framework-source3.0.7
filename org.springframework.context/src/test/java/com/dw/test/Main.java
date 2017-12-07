@@ -23,11 +23,8 @@ package com.dw.test;
  */
 
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractRefreshableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.support.EncodedResource;
 
 import java.io.IOException;
 
@@ -44,6 +41,8 @@ public class Main {
 		System.out.println(beanFactory.getBeanDefinitionCount());
 		Person p = context.getBean(Person.class);
 		System.out.println(p.toString());
+
+        context.registerShutdownHook();
 //		System.in.read();
 	}
 }
