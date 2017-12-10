@@ -71,6 +71,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 		this.registry = registry;
 
 		// Determine ResourceLoader to use.
+		// 这里传进去的是DefaultListableBeanFactory 然而并没有实现ResourceLoader接口 因此loader采用PathMatchingResourcePatternResolver
 		if (this.registry instanceof ResourceLoader) {
 			this.resourceLoader = (ResourceLoader) this.registry;
 		}
@@ -141,6 +142,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 		Assert.notNull(resources, "Resource array must not be null");
 		int counter = 0;
 		for (Resource resource : resources) {
+            logger.debug(">>>>>>>>>>>>>>>>>>>>location的resources-------->" + resource);
 			counter += loadBeanDefinitions(resource);
 		}
 		return counter;
@@ -168,20 +170,23 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 	public int loadBeanDefinitions(String location, Set<Resource> actualResources) throws BeanDefinitionStoreException {
 		// resourceLoader 在new XmlBeanDefinitionReader(beanFactory)的时候创建
 		// 如果beanFactory是ResourceLoader的实例 就使用当前实例作为资源加载器 否则使用PathMatchingResourcePatternResolver
-		// 这里传的是PathMatchingResourcePatternResolver作为资源加载器
+		// 这里传的是ClassPathXmlApplicationContext作为资源加载器
 		ResourceLoader resourceLoader = getResourceLoader();
 		if (resourceLoader == null) {
-			throw new BeanDefinitionStoreException(
+            throw new BeanDefinitionStoreException(
 					"Cannot import bean definitions from location [" + location + "]: no ResourceLoader available");
-		}
-
-		if (resourceLoader instanceof ResourcePatternResolver) {
+        }
+        logger.debug(">>>>>>>>>>>>>>>>>>>>最终的resourceLoader到底是-------->" + resourceLoader.toString());
+        if (resourceLoader instanceof ResourcePatternResolver) {
 			// Resource pattern matching available.
 			try {
 				// location转化为resource值得关注一下
 				// 重点关注resourceLoader#getResources的实现
 				// 实际上是PathMatchingResourcePatternResolver#getResources的实现
 				Resource[] resources = ((ResourcePatternResolver) resourceLoader).getResources(location);
+
+				// 最终同样去调用resource数组的loadBeanDefinitions实现 殊途同归呀
+                // 返回的是bean的数量 重点是这段代码了
 				int loadCount = loadBeanDefinitions(resources);
 				if (actualResources != null) {
 					for (Resource resource : resources) {

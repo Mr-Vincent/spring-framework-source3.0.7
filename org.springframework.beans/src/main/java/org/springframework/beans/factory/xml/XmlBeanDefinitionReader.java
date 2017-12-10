@@ -133,7 +133,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	public XmlBeanDefinitionReader(BeanDefinitionRegistry registry) {
 		// 将factory通过构造器传到XmlBeanDefinitionReader
 		super(registry);
-		logger.info("======================================");
+		logger.info("=================XmlBeanDefinitionReader constructor=====================");
 	}
 
 
@@ -318,6 +318,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 		}
 		// 这里为什么用ThreadLocal去保存当前Resource？？
 		// 一个奇怪的现象就是创建多个资源文件每次进入这个方法set都是空的  只是针对同一个资源文件才有效
+		// 我在一个xml文件里import自己 这样就会报错
 		Set<EncodedResource> currentResources = this.resourcesCurrentlyBeingLoaded.get();
 		if (currentResources == null) {
 			currentResources = new HashSet<EncodedResource>(4);

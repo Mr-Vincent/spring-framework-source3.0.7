@@ -23,7 +23,8 @@ package com.dw.test;
  */
 
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.context.support.AbstractRefreshableApplicationContext;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
@@ -36,7 +37,9 @@ import java.io.IOException;
 public class Main {
 	public static void main(String[] args) throws IOException {
 		// create and configure beans
-		AbstractRefreshableApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"services.xml"});
+		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"services.xml"});
+		ApplicationContext parent = context.getParent();
+		System.out.println(parent==null);
 		ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
 		System.out.println(beanFactory.getBeanDefinitionCount());
 		Person p = context.getBean(Person.class);

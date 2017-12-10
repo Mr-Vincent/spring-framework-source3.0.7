@@ -83,6 +83,7 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 
 		// Configure the bean definition reader with this context's
 		// resource loading environment.
+        // 构造器中的初始化loader后来到这里被重新设置了一次
 		beanDefinitionReader.setResourceLoader(this);
 		beanDefinitionReader.setEntityResolver(new ResourceEntityResolver(this));
 
@@ -90,8 +91,10 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 		// then proceed with actually loading the bean definitions.
 		// 初始化设置 将验证开关置为true
 		initBeanDefinitionReader(beanDefinitionReader);
-		// 加载bena定义：将xml中的内容读到内存中
+		// 加载bean定义：将xml中的内容读到内存中
 		loadBeanDefinitions(beanDefinitionReader);
+
+		logger.debug("-------------getResourceLoader------------------>" + beanDefinitionReader.getResourceLoader().toString());
 	}
 
 	/**
@@ -119,6 +122,8 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 	 * @see #getResourcePatternResolver
 	 */
 	protected void loadBeanDefinitions(XmlBeanDefinitionReader reader) throws BeansException, IOException {
+        // 分别去获取资源：字符串数组类型以及resource数组类型的
+        // 且不同类型的loadBeanDefinitions处理方式不一样
 		Resource[] configResources = getConfigResources();
 		if (configResources != null) {
 			reader.loadBeanDefinitions(configResources);
@@ -128,8 +133,6 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 			// 读取xml中的内容 加载bean定义
 			// 这段代码贼鸡儿绕
 			// 核心在于loadBeanDefinitions的调用
-			// loadBeanDefinitions有好几个重载方法 ---> 核心就是将字符串表示的资源文件名抽象成resource这个对象
-			// 最后调用的是XmlBeanDefinitionReader#loadBeanDefinitions(Resource resource)
 			reader.loadBeanDefinitions(configLocations);
 		}
 	}
