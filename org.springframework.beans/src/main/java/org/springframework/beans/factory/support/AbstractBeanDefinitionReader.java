@@ -144,6 +144,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 		for (Resource resource : resources) {
             logger.debug(">>>>>>>>>>>>>>>>>>>>location的resources-------->" + resource);
 			counter += loadBeanDefinitions(resource);
+			logger.debug(">>>>>>>>>>>>>>>>>>>>这个resource加载了" + counter + " 个bean");
 		}
 		return counter;
 	}

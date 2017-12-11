@@ -4,10 +4,5 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-
-
-    <bean id="petStore" class="com.dw.test.Person">
-        <property name="name" value="dongwei"/>
-        <property name="id" value="42033215856325"/>
-    </bean>
+    <bean id="HashMap" class="java.util.HashMap"/>
 </beans>

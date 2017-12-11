@@ -609,7 +609,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 						"Validation of bean definition failed", ex);
 			}
 		}
-
+		// map去存bean实例
 		synchronized (this.beanDefinitionMap) {
 			Object oldBeanDefinition = this.beanDefinitionMap.get(beanName);
 			if (oldBeanDefinition != null) {

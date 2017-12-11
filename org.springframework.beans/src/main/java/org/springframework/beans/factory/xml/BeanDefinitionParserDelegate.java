@@ -306,6 +306,7 @@ public class BeanDefinitionParserDelegate {
 	/**
 	 * Populate the given DocumentDefaultsDefinition instance with the default lazy-init,
 	 * autowire, dependency check settings, init-method, destroy-method and merge settings.
+	 * 填充默认的xml属性（有些属性我们在xml中没有指定 这里默认去填充）
 	 */
 	protected void populateDefaults(DocumentDefaultsDefinition defaults, Element root) {
 		defaults.setLazyInit(root.getAttribute(DEFAULT_LAZY_INIT_ATTRIBUTE));
@@ -373,13 +374,14 @@ public class BeanDefinitionParserDelegate {
 	public BeanDefinitionHolder parseBeanDefinitionElement(Element ele, BeanDefinition containingBean) {
 		String id = ele.getAttribute(ID_ATTRIBUTE);
 		String nameAttr = ele.getAttribute(NAME_ATTRIBUTE);
-
+        // 将name属性作为别名存起来
 		List<String> aliases = new ArrayList<String>();
 		if (StringUtils.hasLength(nameAttr)) {
 			String[] nameArr = StringUtils.tokenizeToStringArray(nameAttr, BEAN_NAME_DELIMITERS);
 			aliases.addAll(Arrays.asList(nameArr));
 		}
-
+        // name 默认就是id 假如不去指定的话
+        // 如果有name属性 那就使用第一个作为name
 		String beanName = id;
 		if (!StringUtils.hasText(beanName) && !aliases.isEmpty()) {
 			beanName = aliases.remove(0);
@@ -390,9 +392,10 @@ public class BeanDefinitionParserDelegate {
 		}
 
 		if (containingBean == null) {
+		    // 检查是否有命名重复
 			checkNameUniqueness(beanName, aliases, ele);
 		}
-
+        // 将dom元素转化为beanDefinition 这个beanDefinition还不能直接用，还要将其包装为BeanDefinitionHolder
 		AbstractBeanDefinition beanDefinition = parseBeanDefinitionElement(ele, beanName, containingBean);
 		if (beanDefinition != null) {
 			if (!StringUtils.hasText(beanName)) {
@@ -456,29 +459,35 @@ public class BeanDefinitionParserDelegate {
 	 */
 	public AbstractBeanDefinition parseBeanDefinitionElement(
 			Element ele, String beanName, BeanDefinition containingBean) {
-
+        // stack结构 将bean名称封装成一个BeanEntry对象，里面就一个beanDefinitionName字符串
 		this.parseState.push(new BeanEntry(beanName));
-
+        // 类全路径
 		String className = null;
 		if (ele.hasAttribute(CLASS_ATTRIBUTE)) {
 			className = ele.getAttribute(CLASS_ATTRIBUTE).trim();
 		}
 
 		try {
+		    // parent属性 用于继承
 			String parent = null;
 			if (ele.hasAttribute(PARENT_ATTRIBUTE)) {
 				parent = ele.getAttribute(PARENT_ATTRIBUTE);
 			}
+			// 创建GenericBeanDefinition
 			AbstractBeanDefinition bd = createBeanDefinition(className, parent);
-
+            // 解析属性 如：singleton autowire等等
 			parseBeanDefinitionAttributes(ele, beanName, containingBean, bd);
+			// 设置description属性
 			bd.setDescription(DomUtils.getChildElementValueByTagName(ele, DESCRIPTION_ELEMENT));
 
 			parseMetaElements(ele, bd);
+			// 方法注入
 			parseLookupOverrideSubElements(ele, bd.getMethodOverrides());
 			parseReplacedMethodSubElements(ele, bd.getMethodOverrides());
 
+			// 构造注入
 			parseConstructorArgElements(ele, bd);
+			// 属性注入
 			parsePropertyElements(ele, bd);
 			parseQualifierElements(ele, bd);
 
@@ -1348,6 +1357,7 @@ public class BeanDefinitionParserDelegate {
 		BeanDefinitionHolder finalDefinition = definitionHolder;
 
 		// Decorate based on custom attributes first.
+        // 优先处理自定义的属性 spring的属性之前已经处理了
 		NamedNodeMap attributes = ele.getAttributes();
 		for (int i = 0; i < attributes.getLength(); i++) {
 			Node node = attributes.item(i);

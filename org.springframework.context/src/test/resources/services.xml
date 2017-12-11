@@ -4,12 +4,14 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <bean id="postProcessor" class="com.dw.test.UserPostProcessor" />
 
-
-    <bean id="petStore" class="com.dw.test.Person" init-method="init" destroy-method="destory">
+    <bean id="petStore" class="com.dw.test.Person" init-method="init" destroy-method="destory" name="person" autowire-candidate="true">
         <property name="name" value="dongwei"/>
         <property name="id" value="42033215856325"/>
     </bean>
 
-    <bean id="user" class="com.dw.test.UserPostProcessor"/>
+    <bean id="animal" class="com.dw.test.Animal" abstract="true" />
+
+
 </beans>

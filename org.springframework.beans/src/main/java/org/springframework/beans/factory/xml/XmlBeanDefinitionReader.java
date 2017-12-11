@@ -320,6 +320,9 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 		// 一个奇怪的现象就是创建多个资源文件每次进入这个方法set都是空的  只是针对同一个资源文件才有效
 		// 我在一个xml文件里import自己 这样就会报错
 		Set<EncodedResource> currentResources = this.resourcesCurrentlyBeingLoaded.get();
+		logger.info("current thread is ------>>>" + Thread.currentThread().toString());
+		// resource的实现类是DefaultResourceLoader$ClassPathContextResource
+		logger.info("resource impl is ------>>>" + encodedResource.getResource().getClass());
 		if (currentResources == null) {
 			currentResources = new HashSet<EncodedResource>(4);
 			this.resourcesCurrentlyBeingLoaded.set(currentResources);
@@ -498,11 +501,13 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	 */
 	public int registerBeanDefinitions(Document doc, Resource resource) throws BeanDefinitionStoreException {
 		// Read document based on new BeanDefinitionDocumentReader SPI.
+        // 通过反射获取DefaultBeanDefinitionDocumentReader 作为BeanDefinitionDocumentReader实现类
 		BeanDefinitionDocumentReader documentReader = createBeanDefinitionDocumentReader();
-		int countBefore = getRegistry().getBeanDefinitionCount();
-		documentReader.registerBeanDefinitions(doc, createReaderContext(resource));
-		int countAfter = getRegistry().getBeanDefinitionCount();
-		logger.debug(">>>>>>>>>>>>"+ countAfter +" Definitions have found<<<<<<<<<<<<<<<<");
+        int countBefore = getRegistry().getBeanDefinitionCount();
+        logger.debug("countBefore-->>>>>>>>>>>>"+ countBefore +" Definitions have found<<<<<<<<<<<<<<<<");
+        documentReader.registerBeanDefinitions(doc, createReaderContext(resource));
+        int countAfter = getRegistry().getBeanDefinitionCount();
+        logger.debug("countAfter-->>>>>>>>>>>>"+ countAfter +" Definitions have found<<<<<<<<<<<<<<<<");
 		return getRegistry().getBeanDefinitionCount() - countBefore;
 	}
 

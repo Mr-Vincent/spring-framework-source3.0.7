@@ -39,6 +39,7 @@ public class Person implements BeanFactoryAware, BeanNameAware,
 	private BeanFactory beanFactory;
 	private String beanName;
 	private ApplicationContext applicationContext;
+	private UserPostProcessor postProcessor;
 
 	public Person() {
         System.out.println(">>>>>>>>Person<<<<<<<<<");

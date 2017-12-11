@@ -7,6 +7,10 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
  * 旧版本没有这个特性 也不知该怎么去用
  */
 public class UserPostProcessor implements BeanPostProcessor {
+
+    public void say(){
+        System.out.println("=========UserPostProcessor#say=========");
+    }
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         System.out.println("=========postProcessBeforeInitialization============");
         if(bean instanceof Person){
