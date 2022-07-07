@@ -11,7 +11,7 @@
   </parent>
   <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <current.version>3.0.7.RELEASE.dw</current.version>
+      <current.version>3.2.5.RELEASE</current.version>
   </properties>
 
   <repositories>
